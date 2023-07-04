@@ -6,7 +6,7 @@ import DefaultLayout from '@/layouts/DefaultLayout'
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'Início',
     component: DefaultLayout,
     redirect: '/dashboard',
     children: [
@@ -18,6 +18,41 @@ const routes = [
         // which is lazy-loaded when the route is visited.
         component: () =>
           import(/* webpackChunkName: "dashboard" */ '@/views/Dashboard.vue'),
+      },
+      {
+        path: '/board',
+        name: 'Board',
+        component: () => import('@/views/Board.vue'),
+      },
+      {
+        path: '/backlog',
+        name: 'Backlog',
+        component: () => import('@/views/Backlog.vue'),
+      },
+      {
+        path: '/tasks',
+        name: 'Tasks',
+        component: () => import('@/views/Backlog.vue'),
+      },
+      {
+        path: '/task',
+        name: 'Task',
+        component: () => import('@/views/Task.vue'),
+      },
+      {
+        path: '/epics',
+        name: 'Epics',
+        component: () => import('@/views/Epics.vue'),
+      },
+      {
+        path: '/epic',
+        name: 'Epic',
+        component: () => import('@/views/Epic.vue'),
+      },
+      {
+        path: '/labels',
+        name: 'Etiquetas',
+        component: () => import('@/views/Labels.vue'),
       },
       {
         path: '/theme',

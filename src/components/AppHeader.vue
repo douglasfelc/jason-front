@@ -9,13 +9,16 @@
       </CHeaderBrand>
       <CHeaderNav class="d-none d-md-flex me-auto">
         <CNavItem>
-          <CNavLink href="/dashboard"> Seu trabalho </CNavLink>
+          <CNavLink href="/#/dashboard"> Seu trabalho </CNavLink>
         </CNavItem>
         <CNavItem>
           <CNavLink href="#">Projetos</CNavLink>
         </CNavItem>
         <CNavItem>
           <CNavLink href="#">Equipes</CNavLink>
+        </CNavItem>
+        <CNavItem>
+          <CNavLink href="/#/task">Criar</CNavLink>
         </CNavItem>
       </CHeaderNav>
       <CHeaderNav>
@@ -58,6 +61,12 @@ export default {
     return {
       logo,
     }
+  },
+  methods: {
+    teste() {
+      alert('teste')
+      console.log('teste')
+    },
   },
 }
 </script>
