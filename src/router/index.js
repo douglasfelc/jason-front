@@ -41,12 +41,12 @@ const routes = [
       },
       {
         path: '/epics',
-        name: 'Epics',
+        name: 'Épicos',
         component: () => import('@/views/Epics.vue'),
       },
       {
         path: '/epic',
-        name: 'Epic',
+        name: 'Épico',
         component: () => import('@/views/Epic.vue'),
       },
       {

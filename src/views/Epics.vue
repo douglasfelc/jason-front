@@ -1,42 +1,57 @@
 <template>
+  <CRow class="mb-4">
+    <CCol md v-if="hasEpicCollection">
+      <CFormInput v-model="search" type="text" placeholder="Faça sua busca" />
+    </CCol>
+    <CCol md>
+      <CButton
+        component="a"
+        class="float-end"
+        color="primary"
+        href="/#/epic"
+        role="button"
+        >Novo épico</CButton
+      >
+    </CCol>
+  </CRow>
   <CRow>
     <CCol :xs="12">
       <CCard class="mb-4">
         <CCardHeader>
-          <strong>Épicos</strong> <small><a href="/#/epic">Novo</a></small>
+          <strong>Épicos</strong> <small><a>Novo</a></small>
         </CCardHeader>
         <CCardBody>
-          <DocsExample href="components/table.html#hoverable-rows">
-            <CTable striped hover>
-              <CTableHead>
-                <CTableRow>
-                  <CTableHeaderCell scope="col">#</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Class</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Heading</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Heading</CTableHeaderCell>
-                </CTableRow>
-              </CTableHead>
-              <CTableBody>
-                <CTableRow>
-                  <CTableHeaderCell scope="row">1</CTableHeaderCell>
-                  <CTableDataCell>Mark</CTableDataCell>
-                  <CTableDataCell>Otto</CTableDataCell>
-                  <CTableDataCell>@mdo</CTableDataCell>
-                </CTableRow>
-                <CTableRow>
-                  <CTableHeaderCell scope="row">2</CTableHeaderCell>
-                  <CTableDataCell>Jacob</CTableDataCell>
-                  <CTableDataCell>Thornton</CTableDataCell>
-                  <CTableDataCell>@fat</CTableDataCell>
-                </CTableRow>
-                <CTableRow>
-                  <CTableHeaderCell scope="row">3</CTableHeaderCell>
-                  <CTableDataCell colspan="2">Larry the Bird</CTableDataCell>
-                  <CTableDataCell>@twitter</CTableDataCell>
-                </CTableRow>
-              </CTableBody>
-            </CTable>
-          </DocsExample>
+          <CTable striped hover>
+            <CTableHead>
+              <CTableRow>
+                <CTableHeaderCell scope="col">Título</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Data de entrega</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Prioridade</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Ações</CTableHeaderCell>
+              </CTableRow>
+            </CTableHead>
+            <CTableBody>
+              <CTableRow v-for="(epic, key) in epicCollection" :key="key">
+                <CTableDataCell>{{ epic.title }}</CTableDataCell>
+                <CTableDataCell>{{ epic.dueData }}</CTableDataCell>
+                <CTableDataCell>{{ epic.priority }}</CTableDataCell>
+                <CTableDataCell>
+                  <CButton color="dark" variant="outline" size="sm">
+                    Editar
+                  </CButton>
+                  <CButton
+                    color="danger"
+                    variant="outline"
+                    size="sm"
+                    class="ms-2"
+                    @click="handleRemove(key)"
+                  >
+                    Excluir
+                  </CButton>
+                </CTableDataCell>
+              </CTableRow>
+            </CTableBody>
+          </CTable>
         </CCardBody>
       </CCard>
     </CCol>
@@ -44,7 +59,35 @@
 </template>
 
 <script>
+import { copy } from '@/core/helpers/format'
+
 export default {
-  name: 'Tables',
+  name: 'Epics',
+  data() {
+    return {
+      epicCollection: [],
+      search: '',
+    }
+  },
+  mounted() {
+    this.getEpics()
+  },
+  computed: {
+    hasEpicCollection() {
+      return this.epicCollection && this.epicCollection.length ? true : false
+    },
+  },
+  methods: {
+    getEpics() {
+      const epicCollection = localStorage.getItem('epicCollection')
+      if (epicCollection) this.epicCollection = JSON.parse(epicCollection)
+    },
+    handleRemove(id) {
+      const epicCollection = copy(this.epicCollection)
+      epicCollection.splice(id, 1)
+      localStorage.setItem('epicCollection', JSON.stringify(epicCollection))
+      this.epicCollection = epicCollection
+    },
+  },
 }
 </script>

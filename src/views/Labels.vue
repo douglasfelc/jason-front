@@ -4,7 +4,7 @@
       <CFormInput v-model="search" type="text" placeholder="Faça sua busca" />
     </CCol>
     <CCol md>
-      <CButton color="primary float-end" @click="showForm = !showForm"
+      <CButton color="primary" class="float-end" @click="showForm = !showForm"
         >Nova etiqueta</CButton
       >
     </CCol>
@@ -188,9 +188,6 @@ export default {
       labelCollection.splice(id, 1)
       localStorage.setItem('labelCollection', JSON.stringify(labelCollection))
       this.labelCollection = labelCollection
-    },
-    makeCopy(obj) {
-      return JSON.parse(JSON.stringify(obj))
     },
   },
 }

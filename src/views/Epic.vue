@@ -6,12 +6,18 @@
           <strong>Épico</strong>
         </CCardHeader>
         <CCardBody>
-          <CForm>
+          <CForm
+            class="row g-3 needs-validation"
+            novalidate
+            :validated="validatedForm"
+            @submit="handleSubmit"
+          >
             <CFormFloating class="mb-3">
               <CFormInput
                 v-model="epic.title"
                 type="text"
                 placeholder="Título do épico"
+                required
               />
               <CFormLabel for="title">Título</CFormLabel>
             </CFormFloating>
@@ -27,9 +33,7 @@
               ></CFormTextarea>
               <CFormLabel for="description">Descrição</CFormLabel>
             </CFormFloating>
-            <CButton color="primary" type="submit" @click="save()"
-              >Enviar</CButton
-            >
+            <CButton color="primary" type="submit">Criar épico</CButton>
           </CForm>
         </CCardBody>
       </CCard>
@@ -38,15 +42,19 @@
 </template>
 
 <script>
+import { copy } from '@/core/helpers/format'
+
 export default {
-  name: 'FloatingLabels',
+  name: 'Epic',
   data() {
     return {
+      epicCollection: [],
       epic: {
         title: '',
         dueData: '',
         description: '',
       },
+      validatedForm: null,
     }
   },
   props: {
@@ -55,20 +63,29 @@ export default {
       default: '',
     },
   },
-  methods: {
-    async save() {
-      localStorage.setItem('epic', JSON.stringify(this.epic))
-      const epic = localStorage.getItem('epic')
-      console.log('epic', epic)
-    },
+  mounted() {
+    this.getEpics()
   },
-  watch: {
-    /*
-    epic(newEpic) {
-      localStorage.epic = newEpic
-      console.log('localStorage', localStorage)
+  methods: {
+    getEpics() {
+      const epicCollection = localStorage.getItem('epicCollection')
+      if (epicCollection) this.epicCollection = JSON.parse(epicCollection)
     },
-    */
+    async handleSubmit(event) {
+      const form = event.currentTarget
+      event.preventDefault()
+      event.stopPropagation()
+
+      if (!form.checkValidity()) return (this.validatedForm = true)
+      this.validatedForm = null
+
+      let epicCollection = this.epicCollection
+      const epic = copy(this.epic)
+      epicCollection.push(epic)
+      localStorage.setItem('epicCollection', JSON.stringify(epicCollection))
+
+      this.epic = copy(this.defaultEpic)
+    },
   },
 }
 </script>
