@@ -55,6 +55,11 @@ const routes = [
         component: () => import('@/views/Labels.vue'),
       },
       {
+        path: '/status',
+        name: 'Situações',
+        component: () => import('@/views/Status.vue'),
+      },
+      {
         path: '/theme',
         name: 'Theme',
         redirect: '/theme/typography',

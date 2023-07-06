@@ -1,24 +1,24 @@
 <template>
   <CRow class="mb-4">
-    <CCol md v-if="hasLabelCollection">
+    <CCol md v-if="hasStatusCollection">
       <CFormInput v-model="search" type="text" placeholder="Faça sua busca" />
     </CCol>
     <CCol md>
       <CButton color="primary" class="float-end" @click="showForm = !showForm"
-        >Nova etiqueta</CButton
+        >Nova situação</CButton
       >
     </CCol>
   </CRow>
-  <CRow v-show="showForm | !hasLabelCollection">
+  <CRow v-show="showForm | !hasStatusCollection">
     <CCol :xs="12">
       <CCard class="mb-4">
         <CCardHeader>
-          <strong>Nova etiqueta</strong>
+          <strong>Nova situação</strong>
           <span
             class="badge rounded-pill float-end"
-            :style="{ backgroundColor: taskLabel.color }"
+            :style="{ backgroundColor: taskStatus.color }"
           >
-            {{ labelPreview }}
+            {{ statusPreview }}
           </span>
         </CCardHeader>
         <CCardBody>
@@ -32,9 +32,9 @@
               <CFormLabel for="name">Nome</CFormLabel>
               <CFormInput
                 id="name"
-                v-model="taskLabel.name"
+                v-model="taskStatus.name"
                 type="text"
-                placeholder="Nome da etiqueta"
+                placeholder="Nome da situação"
                 required
               />
               <CFormFeedback invalid> Preencha um nome válido </CFormFeedback>
@@ -42,17 +42,17 @@
             <CCol :md="4">
               <CFormLabel for="description">Descrição (opcional)</CFormLabel>
               <CFormInput
-                v-model="taskLabel.description"
+                v-model="taskStatus.description"
                 type="text"
-                placeholder="Descrição da etiqueta"
+                placeholder="Descrição da situação"
               />
             </CCol>
             <CCol :md="1">
               <CFormLabel for="color">Cor</CFormLabel>
               <CFormInput
-                v-model="taskLabel.color"
+                v-model="taskStatus.color"
                 type="color"
-                placeholder="Cor da etiqueta"
+                placeholder="Cor da situação"
                 required
               />
             </CCol>
@@ -71,7 +71,7 @@
                 id="submitButton"
                 type="submit"
                 color="primary"
-                value="Criar etiqueta"
+                value="Criar situação"
               />
             </CCol>
           </CForm>
@@ -79,32 +79,35 @@
       </CCard>
     </CCol>
   </CRow>
-  <CRow v-if="hasLabelCollection">
+  <CRow v-if="hasStatusCollection">
     <CCol :xs="12">
       <CCard class="mb-4">
         <CCardHeader>
-          <strong>Etiquetas</strong>
+          <strong>Situações</strong>
         </CCardHeader>
         <CCardBody>
           <CTable striped hover>
             <CTableHead>
               <CTableRow>
-                <CTableHeaderCell scope="col">Etiqueta</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Situação</CTableHeaderCell>
                 <CTableHeaderCell scope="col">Descrição</CTableHeaderCell>
                 <CTableHeaderCell scope="col">Ações</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
-              <CTableRow v-for="(taskLabel, key) in labelCollection" :key="key">
+              <CTableRow
+                v-for="(taskStatus, key) in statusCollection"
+                :key="key"
+              >
                 <CTableDataCell>
                   <span
                     class="badge rounded-pill"
-                    :style="{ backgroundColor: taskLabel.color }"
+                    :style="{ backgroundColor: taskStatus.color }"
                   >
-                    {{ taskLabel.name }}
+                    {{ taskStatus.name }}
                   </span>
                 </CTableDataCell>
-                <CTableDataCell>{{ taskLabel.description }}</CTableDataCell>
+                <CTableDataCell>{{ taskStatus.description }}</CTableDataCell>
                 <CTableDataCell>
                   <CButton color="dark" variant="outline" size="sm">
                     Editar
@@ -132,9 +135,9 @@
 import { copy } from '@/core/helpers/format'
 
 export default {
-  name: 'Labels',
+  name: 'Status',
   beforeCreate() {
-    this.defaultTaskLabel = {
+    this.defaultTaskStatus = {
       name: '',
       description: '',
       color: '#321fdb',
@@ -142,30 +145,32 @@ export default {
   },
   data() {
     return {
-      labelCollection: [],
+      statusCollection: [],
       search: '',
-      taskLabel: copy(this.defaultTaskLabel),
+      taskStatus: copy(this.defaultTaskStatus),
       showForm: false,
       formSubmit: 'disabled',
       validatedForm: null,
     }
   },
   mounted() {
-    this.getLabels()
+    this.getStatus()
   },
   computed: {
-    labelPreview() {
-      if (!this.taskLabel.name) return 'Pré-visualização'
-      return this.taskLabel.name
+    statusPreview() {
+      if (!this.taskStatus.name) return 'Pré-visualização'
+      return this.taskStatus.name
     },
-    hasLabelCollection() {
-      return this.labelCollection && this.labelCollection.length ? true : false
+    hasStatusCollection() {
+      return this.statusCollection && this.statusCollection.length
+        ? true
+        : false
     },
   },
   methods: {
-    getLabels() {
-      const labelCollection = localStorage.getItem('labelCollection')
-      if (labelCollection) this.labelCollection = JSON.parse(labelCollection)
+    getStatus() {
+      const statusCollection = localStorage.getItem('statusCollection')
+      if (statusCollection) this.statusCollection = JSON.parse(statusCollection)
     },
     handleSubmit(event) {
       const form = event.currentTarget
@@ -175,19 +180,19 @@ export default {
       if (!form.checkValidity()) return (this.validatedForm = true)
       this.validatedForm = null
 
-      let labelCollection = this.labelCollection
-      const taskLabel = copy(this.taskLabel)
-      labelCollection.push(taskLabel)
-      localStorage.setItem('labelCollection', JSON.stringify(labelCollection))
+      let statusCollection = this.statusCollection
+      const taskStatus = copy(this.taskStatus)
+      statusCollection.push(taskStatus)
+      localStorage.setItem('statusCollection', JSON.stringify(statusCollection))
 
-      this.taskLabel = copy(this.defaultTaskLabel)
+      this.taskStatus = copy(this.defaultTaskStatus)
       this.showForm = false
     },
     handleRemove(id) {
-      const labelCollection = copy(this.labelCollection)
-      labelCollection.splice(id, 1)
-      localStorage.setItem('labelCollection', JSON.stringify(labelCollection))
-      this.labelCollection = labelCollection
+      const statusCollection = copy(this.statusCollection)
+      statusCollection.splice(id, 1)
+      localStorage.setItem('statusCollection', JSON.stringify(statusCollection))
+      this.statusCollection = statusCollection
     },
   },
 }

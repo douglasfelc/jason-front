@@ -50,6 +50,12 @@ export default [
     icon: 'cil-list',
   },
   {
+    component: 'CNavItem',
+    name: 'Situações',
+    to: '/status',
+    icon: 'cil-list',
+  },
+  {
     component: 'CNavTitle',
     name: 'Theme',
   },
