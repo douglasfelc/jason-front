@@ -70,6 +70,16 @@ const routes = [
         component: () => import('@/views/Versions.vue'),
       },
       {
+        path: '/project',
+        name: 'Projeto',
+        component: () => import('@/views/Project.vue'),
+      },
+      {
+        path: '/projects',
+        name: 'Projetos',
+        component: () => import('@/views/Projects.vue'),
+      },
+      {
         path: '/theme',
         name: 'Theme',
         redirect: '/theme/typography',

@@ -12,10 +12,10 @@
           <CNavLink href="/#/dashboard"> Seu trabalho </CNavLink>
         </CNavItem>
         <CNavItem>
-          <CNavLink href="#">Projetos</CNavLink>
+          <CNavLink href="/#/projects">Projetos</CNavLink>
         </CNavItem>
         <CNavItem>
-          <CNavLink href="#">Equipes</CNavLink>
+          <CNavLink href="/#/teams">Equipes</CNavLink>
         </CNavItem>
         <CNavItem>
           <CNavLink href="/#/task">Criar</CNavLink>
