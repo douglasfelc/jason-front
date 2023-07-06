@@ -12,28 +12,68 @@
             :validated="validatedForm"
             @submit="handleSubmit"
           >
-            <CFormFloating class="mb-3">
+            <CCol :md="6">
+              <CFormLabel for="title">Título</CFormLabel>
               <CFormInput
+                id="title"
                 v-model="epic.title"
                 type="text"
                 placeholder="Título do épico"
                 required
               />
-              <CFormLabel for="title">Título</CFormLabel>
-            </CFormFloating>
-            <CFormFloating class="mb-3">
-              <CFormInput v-model="epic.dueData" type="text" />
-              <CFormLabel for="title">Data de entrega</CFormLabel>
-            </CFormFloating>
-            <CFormFloating>
-              <CFormTextarea
+              <CFormFeedback invalid> Preencha um título válido </CFormFeedback>
+            </CCol>
+            <CCol :md="3">
+              <CFormLabel for="dueData">Data de entrega</CFormLabel>
+              <CFormInput
+                id="dueData"
+                v-model="epic.dueData"
+                type="text"
+                placeholder="Data de entrega"
+              />
+            </CCol>
+            <CCol :md="3">
+              <CFormLabel for="priority">Prioridade</CFormLabel>
+              <CFormSelect id="priority" v-model="epic.priority">
+                <option disabled>Choose...</option>
+                <option>...</option>
+              </CFormSelect>
+              <CFormFeedback invalid> Selecione a prioridade </CFormFeedback>
+            </CCol>
+            <CCol :md="3">
+              <CFormLabel for="responsibles">Responsáveis</CFormLabel>
+              <CFormSelect id="responsibles" v-model="epic.responsibles">
+                <option disabled>Choose...</option>
+                <option>...</option>
+              </CFormSelect>
+              <CFormFeedback invalid>
+                Selecione um ou mais responsáveis
+              </CFormFeedback>
+            </CCol>
+            <CCol :md="3">
+              <CFormLabel for="affectedVersions">Versões afetadas</CFormLabel>
+              <CFormSelect
+                id="affectedVersions"
+                v-model="epic.affectedVersions"
+              >
+                <option disabled>Choose...</option>
+                <option>...</option>
+              </CFormSelect>
+              <CFormFeedback invalid>
+                Selecione um ou mais responsáveis
+              </CFormFeedback>
+            </CCol>
+            <CCol :md="6">
+              <CFormLabel for="description">Descrição (opcional)</CFormLabel>
+              <CFormInput
                 v-model="epic.description"
-                placeholder="Descreva sua tarefa"
-                style="height: 100px"
-              ></CFormTextarea>
-              <CFormLabel for="description">Descrição</CFormLabel>
-            </CFormFloating>
-            <CButton color="primary" type="submit">Criar épico</CButton>
+                type="text"
+                placeholder="Descrição do épico"
+              />
+            </CCol>
+            <CCol :xs="12">
+              <CButton color="primary" type="submit">Criar épico</CButton>
+            </CCol>
           </CForm>
         </CCardBody>
       </CCard>
@@ -52,6 +92,9 @@ export default {
       epic: {
         title: '',
         dueData: '',
+        priority: null,
+        responsibles: [],
+        affectedVersions: [],
         description: '',
       },
       validatedForm: null,
@@ -84,7 +127,8 @@ export default {
       epicCollection.push(epic)
       localStorage.setItem('epicCollection', JSON.stringify(epicCollection))
 
-      this.epic = copy(this.defaultEpic)
+      event.currentTarget.reset()
+      this.$router.push('epics')
     },
   },
 }

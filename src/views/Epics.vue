@@ -18,7 +18,7 @@
     <CCol :xs="12">
       <CCard class="mb-4">
         <CCardHeader>
-          <strong>Épicos</strong> <small><a>Novo</a></small>
+          <strong>Épicos</strong>
         </CCardHeader>
         <CCardBody>
           <CTable striped hover>
