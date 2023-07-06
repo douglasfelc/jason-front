@@ -56,6 +56,12 @@ export default [
     icon: 'cil-list',
   },
   {
+    component: 'CNavItem',
+    name: 'Versões',
+    to: '/versions',
+    icon: 'cil-list',
+  },
+  {
     component: 'CNavTitle',
     name: 'Theme',
   },

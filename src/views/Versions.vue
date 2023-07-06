@@ -1,6 +1,6 @@
 <template>
   <CRow class="mb-4">
-    <CCol md v-if="hasEpicCollection">
+    <CCol md v-if="hasVersionCollection">
       <CFormInput v-model="search" type="text" placeholder="Faça sua busca" />
     </CCol>
     <CCol md>
@@ -8,9 +8,9 @@
         component="a"
         class="float-end"
         color="primary"
-        href="/#/epic"
+        href="/#/version"
         role="button"
-        >Novo épico</CButton
+        >Nova versão</CButton
       >
     </CCol>
   </CRow>
@@ -18,23 +18,25 @@
     <CCol :xs="12">
       <CCard class="mb-4">
         <CCardHeader>
-          <strong>Épicos</strong>
+          <strong>Versões</strong>
         </CCardHeader>
         <CCardBody>
           <CTable striped hover>
             <CTableHead>
               <CTableRow>
-                <CTableHeaderCell scope="col">Título</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Data de entrega</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Prioridade</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Nome</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Data de início</CTableHeaderCell>
+                <CTableHeaderCell scope="col"
+                  >Data de lançamento</CTableHeaderCell
+                >
                 <CTableHeaderCell scope="col">Ações</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
-              <CTableRow v-for="(epic, key) in epicCollection" :key="key">
-                <CTableDataCell>{{ epic.title }}</CTableDataCell>
-                <CTableDataCell>{{ epic.dueDate }}</CTableDataCell>
-                <CTableDataCell>{{ epic.priority }}</CTableDataCell>
+              <CTableRow v-for="(version, key) in versionCollection" :key="key">
+                <CTableDataCell>{{ version.name }}</CTableDataCell>
+                <CTableDataCell>{{ version.startDate }}</CTableDataCell>
+                <CTableDataCell>{{ version.releaseDate }}</CTableDataCell>
                 <CTableDataCell>
                   <CButton color="dark" variant="outline" size="sm">
                     Editar
@@ -62,31 +64,37 @@
 import { copy } from '@/core/helpers/format'
 
 export default {
-  name: 'Epics',
+  name: 'Versions',
   data() {
     return {
-      epicCollection: [],
+      versionCollection: [],
       search: '',
     }
   },
   mounted() {
-    this.getEpics()
+    this.getVersions()
   },
   computed: {
-    hasEpicCollection() {
-      return this.epicCollection && this.epicCollection.length ? true : false
+    hasVersionCollection() {
+      return this.versionCollection && this.versionCollection.length
+        ? true
+        : false
     },
   },
   methods: {
-    getEpics() {
-      const epicCollection = localStorage.getItem('epicCollection')
-      if (epicCollection) this.epicCollection = JSON.parse(epicCollection)
+    getVersions() {
+      const versionCollection = localStorage.getItem('versionCollection')
+      if (versionCollection)
+        this.versionCollection = JSON.parse(versionCollection)
     },
     handleRemove(id) {
-      const epicCollection = copy(this.epicCollection)
-      epicCollection.splice(id, 1)
-      localStorage.setItem('epicCollection', JSON.stringify(epicCollection))
-      this.epicCollection = epicCollection
+      const versionCollection = copy(this.versionCollection)
+      versionCollection.splice(id, 1)
+      localStorage.setItem(
+        'versionCollection',
+        JSON.stringify(versionCollection),
+      )
+      this.versionCollection = versionCollection
     },
   },
 }

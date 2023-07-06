@@ -16,7 +16,7 @@
           <strong>Nova situação</strong>
           <span
             class="badge rounded-pill float-end"
-            :style="{ backgroundColor: taskStatus.color }"
+            :style="{ backgroundColor: status.color }"
           >
             {{ statusPreview }}
           </span>
@@ -32,7 +32,7 @@
               <CFormLabel for="name">Nome</CFormLabel>
               <CFormInput
                 id="name"
-                v-model="taskStatus.name"
+                v-model="status.name"
                 type="text"
                 placeholder="Nome da situação"
                 required
@@ -42,7 +42,7 @@
             <CCol :md="4">
               <CFormLabel for="description">Descrição (opcional)</CFormLabel>
               <CFormInput
-                v-model="taskStatus.description"
+                v-model="status.description"
                 type="text"
                 placeholder="Descrição da situação"
               />
@@ -50,7 +50,7 @@
             <CCol :md="1">
               <CFormLabel for="color">Cor</CFormLabel>
               <CFormInput
-                v-model="taskStatus.color"
+                v-model="status.color"
                 type="color"
                 placeholder="Cor da situação"
                 required
@@ -95,19 +95,16 @@
               </CTableRow>
             </CTableHead>
             <CTableBody>
-              <CTableRow
-                v-for="(taskStatus, key) in statusCollection"
-                :key="key"
-              >
+              <CTableRow v-for="(status, key) in statusCollection" :key="key">
                 <CTableDataCell>
                   <span
                     class="badge rounded-pill"
-                    :style="{ backgroundColor: taskStatus.color }"
+                    :style="{ backgroundColor: status.color }"
                   >
-                    {{ taskStatus.name }}
+                    {{ status.name }}
                   </span>
                 </CTableDataCell>
-                <CTableDataCell>{{ taskStatus.description }}</CTableDataCell>
+                <CTableDataCell>{{ status.description }}</CTableDataCell>
                 <CTableDataCell>
                   <CButton color="dark" variant="outline" size="sm">
                     Editar
@@ -147,7 +144,7 @@ export default {
     return {
       statusCollection: [],
       search: '',
-      taskStatus: copy(this.defaultTaskStatus),
+      status: copy(this.defaultTaskStatus),
       showForm: false,
       formSubmit: 'disabled',
       validatedForm: null,
@@ -158,8 +155,8 @@ export default {
   },
   computed: {
     statusPreview() {
-      if (!this.taskStatus.name) return 'Pré-visualização'
-      return this.taskStatus.name
+      if (!this.status.name) return 'Pré-visualização'
+      return this.status.name
     },
     hasStatusCollection() {
       return this.statusCollection && this.statusCollection.length
@@ -181,11 +178,11 @@ export default {
       this.validatedForm = null
 
       let statusCollection = this.statusCollection
-      const taskStatus = copy(this.taskStatus)
-      statusCollection.push(taskStatus)
+      const status = copy(this.status)
+      statusCollection.push(status)
       localStorage.setItem('statusCollection', JSON.stringify(statusCollection))
 
-      this.taskStatus = copy(this.defaultTaskStatus)
+      this.status = copy(this.defaultTaskStatus)
       this.showForm = false
     },
     handleRemove(id) {

@@ -3,7 +3,7 @@
     <CCol :xs="12">
       <CCard class="mb-4">
         <CCardHeader>
-          <strong>Épico</strong>
+          <strong>Versão</strong>
         </CCardHeader>
         <CCardBody>
           <CForm
@@ -13,49 +13,37 @@
             @submit="handleSubmit"
           >
             <CCol :md="6">
-              <CFormLabel for="title">Título</CFormLabel>
+              <CFormLabel for="name">Nome</CFormLabel>
               <CFormInput
-                id="title"
-                v-model="epic.title"
+                id="name"
+                v-model="version.name"
                 type="text"
-                placeholder="Título do épico"
+                placeholder="Nome da versão"
                 required
               />
               <CFormFeedback invalid> Preencha um título válido </CFormFeedback>
             </CCol>
             <CCol :md="3">
-              <CFormLabel for="dueDate">Data de entrega</CFormLabel>
+              <CFormLabel for="startDate">Data de início</CFormLabel>
               <CFormInput
-                id="dueDate"
-                v-model="epic.dueDate"
+                id="startDate"
+                v-model="version.startDate"
                 type="text"
                 placeholder="Data de entrega"
               />
             </CCol>
             <CCol :md="3">
-              <CFormLabel for="priority">Prioridade</CFormLabel>
-              <CFormSelect id="priority" v-model="epic.priority">
-                <option disabled>Choose...</option>
-                <option>...</option>
-              </CFormSelect>
-              <CFormFeedback invalid> Selecione a prioridade </CFormFeedback>
+              <CFormLabel for="releaseDate">Data de lançamento</CFormLabel>
+              <CFormInput
+                id="releaseDate"
+                v-model="version.releaseDate"
+                type="text"
+                placeholder="Data de lançamento"
+              />
             </CCol>
-            <CCol :md="3">
+            <CCol :md="6">
               <CFormLabel for="responsibles">Responsáveis</CFormLabel>
-              <CFormSelect id="responsibles" v-model="epic.responsibles">
-                <option disabled>Choose...</option>
-                <option>...</option>
-              </CFormSelect>
-              <CFormFeedback invalid>
-                Selecione um ou mais responsáveis
-              </CFormFeedback>
-            </CCol>
-            <CCol :md="3">
-              <CFormLabel for="affectedVersions">Versões afetadas</CFormLabel>
-              <CFormSelect
-                id="affectedVersions"
-                v-model="epic.affectedVersions"
-              >
+              <CFormSelect id="responsibles" v-model="version.responsibles">
                 <option disabled>Choose...</option>
                 <option>...</option>
               </CFormSelect>
@@ -66,13 +54,13 @@
             <CCol :md="6">
               <CFormLabel for="description">Descrição (opcional)</CFormLabel>
               <CFormInput
-                v-model="epic.description"
+                v-model="version.description"
                 type="text"
-                placeholder="Descrição do épico"
+                placeholder="Descrição da versão"
               />
             </CCol>
             <CCol :xs="12">
-              <CButton color="primary" type="submit">Criar épico</CButton>
+              <CButton color="primary" type="submit">Criar versão</CButton>
             </CCol>
           </CForm>
         </CCardBody>
@@ -85,16 +73,15 @@
 import { copy } from '@/core/helpers/format'
 
 export default {
-  name: 'Epic',
+  name: 'Version',
   data() {
     return {
-      epicCollection: [],
-      epic: {
-        title: '',
-        dueDate: '',
-        priority: null,
+      versionCollection: [],
+      version: {
+        name: '',
+        startDate: '',
+        releaseDate: '',
         responsibles: [],
-        affectedVersions: [],
         description: '',
       },
       validatedForm: null,
@@ -107,12 +94,13 @@ export default {
     },
   },
   mounted() {
-    this.getEpics()
+    this.getVersions()
   },
   methods: {
-    getEpics() {
-      const epicCollection = localStorage.getItem('epicCollection')
-      if (epicCollection) this.epicCollection = JSON.parse(epicCollection)
+    getVersions() {
+      const versionCollection = localStorage.getItem('versionCollection')
+      if (versionCollection)
+        this.versionCollection = JSON.parse(versionCollection)
     },
     async handleSubmit(event) {
       const form = event.currentTarget
@@ -122,13 +110,16 @@ export default {
       if (!form.checkValidity()) return (this.validatedForm = true)
       this.validatedForm = null
 
-      let epicCollection = this.epicCollection
-      const epic = copy(this.epic)
-      epicCollection.push(epic)
-      localStorage.setItem('epicCollection', JSON.stringify(epicCollection))
+      let versionCollection = this.versionCollection
+      const version = copy(this.version)
+      versionCollection.push(version)
+      localStorage.setItem(
+        'versionCollection',
+        JSON.stringify(versionCollection),
+      )
 
       event.currentTarget.reset()
-      this.$router.push('epics')
+      this.$router.push('versions')
     },
   },
 }

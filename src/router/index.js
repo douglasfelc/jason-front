@@ -60,6 +60,16 @@ const routes = [
         component: () => import('@/views/Status.vue'),
       },
       {
+        path: '/version',
+        name: 'Versão',
+        component: () => import('@/views/Version.vue'),
+      },
+      {
+        path: '/versions',
+        name: 'Versões',
+        component: () => import('@/views/Versions.vue'),
+      },
+      {
         path: '/theme',
         name: 'Theme',
         redirect: '/theme/typography',
