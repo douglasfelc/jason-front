@@ -9,122 +9,128 @@
           <CForm>
             <CRow :xs="{ gutter: 2 }">
               <CCol md>
-                <CFormFloating class="mb-3">
+                <CCol>
+                  <CFormLabel for="title">Título</CFormLabel>
                   <CFormInput
+                    id="title"
                     v-model="task.title"
                     type="text"
-                    placeholder="Título da tarefa"
+                    placeholder="Título do épico"
+                    required
                   />
-                  <CFormLabel for="title">Título</CFormLabel>
-                </CFormFloating>
-                <CFormFloating>
-                  <CFormTextarea
-                    v-model="task.description"
-                    placeholder="Descreva sua tarefa"
-                    style="height: 100px"
-                  ></CFormTextarea>
+                  <CFormFeedback invalid>
+                    Preencha um título válido
+                  </CFormFeedback>
+                </CCol>
+
+                <CCol>
                   <CFormLabel for="description">Descrição</CFormLabel>
-                </CFormFloating>
-                <CButton color="primary" type="submit" @click="save()"
-                  >Enviar</CButton
-                >
+                  <CFormInput
+                    v-model="task.description"
+                    type="text"
+                    placeholder="Descrição da tarefa"
+                  />
+                </CCol>
+
+                <CCol>
+                  <CButton color="primary" type="submit" @click="save()"
+                    >Criar tarefa</CButton
+                  >
+                </CCol>
               </CCol>
-              <CCol md>
-                <CFormFloating>
-                  <CFormSelect
-                    v-model="task.responsibles"
-                    aria-label="Floating label select example"
-                    class="mb-3"
-                  >
-                    <option>Nenhum</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </CFormSelect>
-                  <CFormLabel for="responsibles">Responsáveis</CFormLabel>
-                </CFormFloating>
-                <CFormFloating>
-                  <CFormSelect
-                    v-model="task.labels"
-                    aria-label="Floating label select example"
-                    class="mb-3"
-                  >
+              <CCol :md="4">
+                <CCol md>
+                  <label>Responsáveis</label>
+                  <VueMultiselect
+                    v-model="value"
+                    tag-placeholder="Add this as new tag"
+                    placeholder="Busque ou adicione um responsável"
+                    label="name"
+                    track-by="code"
+                    :options="userCollection"
+                    :multiple="true"
+                    :taggable="true"
+                  ></VueMultiselect>
+                </CCol>
+                <CCol md>
+                  <label>Etiquetas</label>
+                  <VueMultiselect
+                    v-model="task.taskLabel"
+                    tag-placeholder="Add this as new tag"
+                    placeholder="Busque ou adicione uma etiqueta"
+                    label="name"
+                    track-by="name"
+                    :options="labelCollection"
+                    :multiple="true"
+                    :taggable="true"
+                  ></VueMultiselect>
+                </CCol>
+                <CCol md>
+                  <label>Projetos (selecionar no menu)</label>
+                  <VueMultiselect
+                    v-model="value"
+                    tag-placeholder="Add this as new tag"
+                    placeholder="Busque um adicione um projeto"
+                    label="name"
+                    track-by="code"
+                    :options="projectCollection"
+                    :multiple="true"
+                    :taggable="true"
+                    disabled
+                  ></VueMultiselect>
+                </CCol>
+                <CCol>
+                  <CFormLabel for="status">Situação</CFormLabel>
+                  <CFormSelect id="status" v-model="task.status">
                     <option
-                      v-for="(taskLabel, key) in labelCollection"
+                      v-for="(status, key) in statusCollection"
                       :value="key"
                       :key="key"
                     >
-                      {{ taskLabel.name }}
+                      {{ status.name }}
                     </option>
                   </CFormSelect>
-                  <CFormLabel for="labels">Etiquetas</CFormLabel>
-                </CFormFloating>
-                <CFormFloating>
-                  <CFormSelect
-                    v-model="task.projects"
-                    aria-label="Floating label select example"
-                    class="mb-3"
-                  >
-                    <option>Nenhum</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                  <CFormFeedback invalid> Selecione um épico </CFormFeedback>
+                </CCol>
+                <CCol>
+                  <CFormLabel for="epic">Épicos</CFormLabel>
+                  <CFormSelect id="epic" v-model="task.epic">
+                    <option
+                      v-for="(epic, key) in epicCollection"
+                      :value="key"
+                      :key="key"
+                    >
+                      {{ epic.title }}
+                    </option>
                   </CFormSelect>
-                  <CFormLabel for="projects">Projetos</CFormLabel>
-                </CFormFloating>
-                <CFormFloating>
-                  <CFormSelect
-                    v-model="task.status"
-                    aria-label="Floating label select example"
-                    class="mb-3"
-                  >
-                    <option>Em progresso</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </CFormSelect>
-                  <CFormLabel for="status">Situação</CFormLabel>
-                </CFormFloating>
-                <CFormFloating>
-                  {{ epicCollection }}
-                  <CFormSelect
-                    v-model="task.epic"
-                    aria-label="Floating label select example"
-                    class="mb-3"
-                  >
-                    <option>Em progresso</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </CFormSelect>
-                  <CFormLabel for="epic">Épico (milistone)</CFormLabel>
-                </CFormFloating>
-                <CFormFloating>
-                  <CFormSelect
+                  <CFormFeedback invalid> Selecione um épico </CFormFeedback>
+                </CCol>
+                <CCol md>
+                  <label>Versões afetadas</label>
+                  <VueMultiselect
                     v-model="task.affectedVersions"
-                    aria-label="Floating label select example"
-                    class="mb-3"
-                  >
-                    <option>1.0.1</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </CFormSelect>
-                  <CFormLabel for="affectedVersions"
-                    >Versões afetadas</CFormLabel
-                  >
-                </CFormFloating>
-                <CCard>
-                  <CCardBody>
-                    <CCardSubtitle class="mb-2 text-medium-emphasis"
-                      >Desenvolvimento</CCardSubtitle
-                    >
-                    <CCardLink href="#">Criar branch (modal)</CCardLink>
-                    <CCardLink href="#"
-                      >Criar registro de trabalho (modal)</CCardLink
-                    >
-                  </CCardBody>
-                </CCard>
+                    tag-placeholder="Add this as new tag"
+                    placeholder="Busque ou adicione uma versão"
+                    label="name"
+                    track-by="name"
+                    :options="versionCollection"
+                    :multiple="true"
+                    :taggable="true"
+                  ></VueMultiselect>
+                </CCol>
+                <CCol>
+                  <CCard>
+                    <CCardBody>
+                      <CCardSubtitle class="mb-2 text-medium-emphasis"
+                        >Desenvolvimento</CCardSubtitle
+                      >
+                      <CCardLink href="#">Criar branch (modal)</CCardLink>
+                      <CCardLink href="#"
+                        >Criar registro de trabalho (modal)</CCardLink
+                      >
+                    </CCardBody>
+                  </CCard>
+                </CCol>
               </CCol>
             </CRow>
           </CForm>
@@ -135,10 +141,18 @@
 </template>
 
 <script>
+import VueMultiselect from 'vue-multiselect'
+
 export default {
-  name: 'FloatingLabels',
+  components: { VueMultiselect },
+  name: 'Task',
   data() {
     return {
+      options: [
+        { name: 'Vue.js', code: 'vu' },
+        { name: 'Javascript', code: 'js' },
+        { name: 'Open Source', code: 'os' },
+      ],
       task: {
         title: '',
         description: '',
@@ -146,11 +160,15 @@ export default {
         labels: [],
         projects: [],
         status: 0,
-        epic: 0,
+        epic: [],
         affectedVersions: [],
       },
-      labelCollection: '',
-      epicCollection: '',
+      userCollection: [],
+      labelCollection: [],
+      projectCollection: [],
+      statusCollection: [],
+      epicCollection: [],
+      versionCollection: [],
     }
   },
   props: {
@@ -161,7 +179,9 @@ export default {
   },
   mounted() {
     this.getLabels()
+    this.getStatus()
     this.getEpics()
+    this.getVersions()
   },
   methods: {
     async save() {
@@ -173,17 +193,21 @@ export default {
       const labelCollection = localStorage.getItem('labelCollection')
       if (labelCollection) this.labelCollection = JSON.parse(labelCollection)
     },
+    getStatus() {
+      const statusCollection = localStorage.getItem('statusCollection')
+      if (statusCollection) this.statusCollection = JSON.parse(statusCollection)
+    },
     getEpics() {
-      this.epicCollection = localStorage.getItem('epicCollection')
+      const epicCollection = localStorage.getItem('epicCollection')
+      if (epicCollection) this.epicCollection = JSON.parse(epicCollection)
     },
-  },
-  watch: {
-    /*
-    task(newTask) {
-      localStorage.task = newTask
-      console.log('localStorage', localStorage)
+    getVersions() {
+      const versionCollection = localStorage.getItem('versionCollection')
+      if (versionCollection)
+        this.versionCollection = JSON.parse(versionCollection)
     },
-    */
   },
 }
 </script>
+
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>
