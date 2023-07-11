@@ -25,11 +25,13 @@
 
                 <CCol>
                   <CFormLabel for="description">Descrição</CFormLabel>
-                  <CFormInput
+                  <QuillEditor
+                    id="description"
                     v-model="task.description"
-                    type="text"
-                    placeholder="Descrição da tarefa"
-                  />
+                    :options="quillEditorOptions"
+                    style="height: 300px"
+                  >
+                  </QuillEditor>
                 </CCol>
 
                 <CCol>
@@ -142,17 +144,22 @@
 
 <script>
 import VueMultiselect from 'vue-multiselect'
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
 export default {
-  components: { VueMultiselect },
   name: 'Task',
+  components: { VueMultiselect, QuillEditor },
   data() {
     return {
-      options: [
-        { name: 'Vue.js', code: 'vu' },
-        { name: 'Javascript', code: 'js' },
-        { name: 'Open Source', code: 'os' },
-      ],
+      quillEditorOptions: {
+        debug: 'info',
+        modules: {
+          toolbar: ['bold', 'italic', 'underline'],
+        },
+        placeholder: 'Adicione um comentarário...',
+        theme: 'snow',
+      },
       task: {
         title: '',
         description: '',
